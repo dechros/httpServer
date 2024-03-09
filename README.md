@@ -4,6 +4,9 @@ This project is an HTTP server written for Windows based operating systems.
 
 ## Naming Conventions
 
+- Use `struct` with a `typedef`.
+- Use `constexpr` instead `#define` macro.
+
 ### camelCase
 
 - **Variables**: Start with a lowercase letter and capitalize the first letter of each subsequent word. (e.g., myVariable, totalAmount).

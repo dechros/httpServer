@@ -9,6 +9,7 @@
             "args": [],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "Build Program",
+            "terminal": "integrated"
         }
     ]
 }
