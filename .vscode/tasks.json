@@ -1,0 +1,32 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "Build Program",
+            "command": "C:\\TDM-GCC-64\\bin\\g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-std=c++17",
+                "-g",
+                "${workspaceFolder}\\source\\main.cpp",
+                "${workspaceFolder}\\source\\socketController.cpp",
+                "-o",
+                "${workspaceFolder}\\bin\\main.exe",
+                "-I",
+                "${workspaceFolder}\\include\\"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "No details."
+        }
+    ],
+    "version": "2.0.0"
+}
