@@ -1,6 +1,6 @@
 # HTTP Server
 
-This project is an HTTP server designed for Windows-based operating systems.
+This project is an HTTP server written for Windows-based operating systems with C++ language.
 
 ## Naming Conventions
 

@@ -10,7 +10,7 @@
                 "-g",
                 "${workspaceFolder}\\source\\main.cpp",
                 "${workspaceFolder}\\source\\socketController.cpp",
-                "${workspaceFolder}\\source\\serverController.cpp",
+                "${workspaceFolder}\\source\\httpController.cpp",
                 "-o",
                 "${workspaceFolder}\\bin\\main.exe",
                 "-lws2_32",

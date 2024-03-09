@@ -9,7 +9,6 @@
 #include <winsock2.h>
 
 constexpr int BUFFER_SIZE = 1024;
-constexpr int PORT = 8888;
 
 class SocketController
 {
@@ -24,12 +23,12 @@ private:
     SocketAddress clientSocketAddress;
     int clientSocketAdressLen;
 
-    void clientHandle(SOCKET clientSocket);
+    void clientHandleThread(const SOCKET clientSocket);
+    void mainThread(void);
 
 public:
-    SocketController(void);
+    SocketController(const int port);
     ~SocketController(void);
-    void run(void);
 };
 
 #endif

@@ -56,5 +56,8 @@
         "condition_variable": "cpp",
         "mutex": "cpp",
         "fstream": "cpp"
-    }
+    },
+    "C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
+        "clang-diagnostic-error"
+    ]
 }

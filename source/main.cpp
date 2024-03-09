@@ -6,16 +6,23 @@
  * @date 09-03-2024
  *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 
 #include <iostream>
-#include "socketController.h"
-#include "serverController.h"
+#include "httpController.h"
 
 int main(void)
 {
-    SocketController socketController;
-    socketController.run();
+    HttpController httpController;
+    while (true)
+    {
+        std::string userInput;
+        std::getline(std::cin, userInput);
+        if (userInput == "exit")
+        {
+            break;
+        }
+    }
     return 0;
 }
