@@ -13,7 +13,7 @@ This project is an HTTP server written for Windows based operating systems.
 - **Local Variables**: Same as variables (e.g., int count, std::string message).
 - **Source Files**: Same as variables (e.g., myClass.cpp, utilsFunctions.cpp).
 - **Header Files**: Same as variables, often with .h or .hpp extension (e.g., myClass.hpp, utilsFunctions.hpp).
-- **Namespaces**: Usually lowercase with underscores or camel case (e.g., namespace utils { /*... */ }, namespace mynamespace { /*...*/ }).
+- **Namespaces**: Same as variables (e.g., namespace utils { /*... */ }, namespace mynamespace { /*...*/ }).
 
 ### PascalCase
 
