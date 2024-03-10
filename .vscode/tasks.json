@@ -3,17 +3,17 @@
         {
             "type": "cppbuild",
             "label": "Build Program",
-            "command": "C:\\TDM-GCC-64\\bin\\g++.exe",
+            "command": "C:\\TDM-GCC-64\\bin\\gcc.exe",
             "args": [
                 "-fdiagnostics-color=always",
-                "-std=c++20",
+                "-std=c17",
                 "-g",
-                "${workspaceFolder}\\source\\main.cpp",
-                "${workspaceFolder}\\source\\socketController.cpp",
-                "${workspaceFolder}\\source\\httpController.cpp",
+                "${workspaceFolder}\\source\\main.c",
+                "${workspaceFolder}\\source\\socket.c",
                 "-o",
                 "${workspaceFolder}\\bin\\main.exe",
                 "-lws2_32",
+                "-pthread",
                 "-I",
                 "${workspaceFolder}\\include\\"
             ],

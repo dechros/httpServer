@@ -55,6 +55,9 @@
         "thread": "cpp",
         "condition_variable": "cpp",
         "mutex": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "socket.h": "c",
+        "pthread.h": "c",
+        "stdio.h": "c"
     },
 }
