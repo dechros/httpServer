@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include <winsock2.h>
 
-constexpr int BUFFER_SIZE = 1024;
+constexpr int BUFFER_SIZE = 4096;
 
 class SocketController
 {
@@ -23,12 +23,13 @@ private:
     SocketAddress clientSocketAddress;
     int clientSocketAdressLen;
 
-    void clientHandleThread(const SOCKET clientSocket);
+    void clientHandleThread(const SOCKET socket);
     void mainThread(void);
 
 public:
     SocketController(const int port);
     ~SocketController(void);
+    virtual std::string requestHandler(const std::string &request) = 0;
 };
 
 #endif

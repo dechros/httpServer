@@ -12,9 +12,11 @@
 #include <iostream>
 #include "httpController.h"
 
+constexpr int PORT = 8888;
+
 int main(void)
 {
-    HttpController httpController;
+    HttpController httpController(PORT);
     while (true)
     {
         std::string userInput;

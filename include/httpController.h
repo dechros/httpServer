@@ -3,15 +3,13 @@
 
 #include "socketController.h"
 
-constexpr int PORT = 8888;
-
-class HttpController
+class HttpController : private SocketController
 {
 private:
-    SocketController socketController;
+    std::string requestHandler(const std::string &request) override;
 
 public:
-    HttpController();
+    HttpController(int port);
     ~HttpController();
 };
 
