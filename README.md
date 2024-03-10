@@ -1,6 +1,9 @@
 # HTTP Server
 
-This project is an HTTP server written for Windows-based operating systems with C++ language.
+This project is an HTTP server developed for Windows operating systems and built using the GNU C++ compiler (g++.exe tdm64-1 10.3.0) with the following configurations:
+
+- Compiler Path: `C:\TDM-GCC-64\bin\g++.exe`
+- C++ Standard: GNU C++20
 
 ## Naming Conventions
 
