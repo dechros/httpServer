@@ -1,6 +1,7 @@
 #ifndef HTTP_CONTROLLER_H
 #define HTTP_CONTROLLER_H
 
+#include <iostream>
 #include "socketController.h"
 
 class HttpController : private SocketController

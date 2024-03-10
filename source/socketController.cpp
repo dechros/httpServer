@@ -88,10 +88,9 @@ void SocketController::clientHandleThread(const SOCKET socket)
             break;
         }
 
-        std::cout << "Bytes received : " << bytesReceived << " Incoming raw data : " << buffer.data() << std::endl;
+        std::cout << "Bytes received : " << bytesReceived << std::endl;
 
-        std::string request;
-        std::copy(buffer.begin(), buffer.end(), request.begin());
+        std::string request(buffer.data());
         std::string response = requestHandler(request);
 
         int sendStatus = send(socket, response.c_str(), sizeof(response.c_str()), 0);
