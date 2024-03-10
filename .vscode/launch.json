@@ -3,13 +3,22 @@
     "configurations": [
         {
             "name": "Launch Program",
-            "type": "lldb",
+            "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bin/main.exe",
             "args": [],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "Build Program",
-            "terminal": "integrated"
+            "stopAtEntry": true,
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }
