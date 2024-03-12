@@ -10,6 +10,5 @@ enum server_errors
 
 extern enum server_errors server_init(const int port);
 extern enum server_errors server_run(void);
-extern enum server_errors server_stop(void);
 
 #endif

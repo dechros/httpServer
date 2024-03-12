@@ -33,15 +33,7 @@ int main(void)
         }
         else
         {
-            error = server_stop();
-            if (error != SERVER_NO_ERROR)
-            {
-                ret_val = EXIT_FAILURE;
-            }
-            else
-            {
-                ret_val = EXIT_SUCCESS;
-            }
+            ret_val = EXIT_SUCCESS;
         }
     }
     return ret_val;
