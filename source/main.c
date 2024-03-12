@@ -9,18 +9,40 @@
  *
  */
 
-#include <stdio.h>
-#include "socket.h"
+#include <stdlib.h>
+#include "server.h"
 
 #define PORT 8888
 
 int main(void)
 {
-    socketInit(PORT);
-    while (true)
+    int ret_val = EXIT_FAILURE;
+    enum server_errors error;
+
+    error = server_init(PORT);
+    if (error != SERVER_NO_ERROR)
     {
-        char userInput;
-        scanf(&userInput);
+        ret_val = EXIT_FAILURE;
     }
-    exit(EXIT_SUCCESS);
+    else
+    {
+        error = server_run();
+        if (error != SERVER_NO_ERROR)
+        {
+            ret_val = EXIT_FAILURE;
+        }
+        else
+        {
+            error = server_stop();
+            if (error != SERVER_NO_ERROR)
+            {
+                ret_val = EXIT_FAILURE;
+            }
+            else
+            {
+                ret_val = EXIT_SUCCESS;
+            }
+        }
+    }
+    return ret_val;
 }

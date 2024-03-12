@@ -58,6 +58,10 @@
         "fstream": "cpp",
         "socket.h": "c",
         "pthread.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "winsock2.h": "c",
+        "stdbool.h": "c",
+        "handler.h": "c",
+        "client.h": "c"
     },
 }
