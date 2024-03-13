@@ -14,27 +14,22 @@
 
 #define PORT 8888
 
+static struct tcp_server server;
+
 int main(void)
 {
-    int ret_val = EXIT_FAILURE;
     enum server_errors error;
-
-    error = server_init(PORT);
+    error = server_init(&server, PORT);
     if (error != SERVER_NO_ERROR)
     {
-        ret_val = EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
-    else
+
+    error = server_run(&server);
+    if (error != SERVER_NO_ERROR)
     {
-        error = server_run();
-        if (error != SERVER_NO_ERROR)
-        {
-            ret_val = EXIT_FAILURE;
-        }
-        else
-        {
-            ret_val = EXIT_SUCCESS;
-        }
+        return EXIT_FAILURE;
     }
-    return ret_val;
+
+    return EXIT_SUCCESS;
 }
