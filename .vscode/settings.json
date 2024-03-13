@@ -62,6 +62,10 @@
         "winsock2.h": "c",
         "stdbool.h": "c",
         "handler.h": "c",
-        "client.h": "c"
+        "client.h": "c",
+        "server.h": "c",
+        "string.h": "c",
+        "windows.h": "c",
+        "stdlib.h": "c"
     },
 }

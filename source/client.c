@@ -13,20 +13,14 @@ enum request_types
     OTHER
 };
 
-enum client_errors
-{
-    CLIENT_NO_ERROR,
-    CLIENT_RECEIVE_ERROR,
-    CLIENT_SEND_ERROR
-};
-
 void *handle_client(void *arg)
 {
     SOCKET client_socket = (SOCKET)arg;
     char request_buffer[BUFFER_SIZE] = {0};
     char response_buffer[BUFFER_SIZE] = {0};
-
     enum client_errors ret_val = CLIENT_NO_ERROR;
+
+    printf("Client thread is created. Socket : %d\n", client_socket);
 
     while (ret_val == CLIENT_NO_ERROR)
     {
@@ -57,6 +51,7 @@ void *handle_client(void *arg)
         }
     }
 
+    printf("Client thread is closed. Socket : %d\n", client_socket);
     closesocket(client_socket);
 }
 
