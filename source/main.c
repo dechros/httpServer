@@ -19,9 +19,7 @@
 #define PORT 8888
 
 static struct tcp_server server1 = {0};
-//static struct tcp_server server2 = {0};
-
-static BOOL WINAPI ConsoleCtrlHandler(DWORD ctrl_type);
+static struct tcp_server server2 = {0};
 
 int main(void)
 {
@@ -34,7 +32,7 @@ int main(void)
         return EXIT_FAILURE;
     }
 
-    //error = server_init(&server2, 3152);
+    error = server_init(&server2, 3152);
     if (error != SERVER_NO_ERROR)
     {
         return EXIT_FAILURE;
@@ -46,7 +44,7 @@ int main(void)
         return EXIT_FAILURE;
     }
 
-    //error = server_run(&server2);
+    error = server_run(&server2);
     if (error != SERVER_NO_ERROR)
     {
         return EXIT_FAILURE;
@@ -63,7 +61,7 @@ int main(void)
     }
 
     error = server_stop(&server1);
-    //error = server_stop(&server2);
+    error = server_stop(&server2);
 
     return EXIT_SUCCESS;
 }

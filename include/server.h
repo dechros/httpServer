@@ -4,6 +4,7 @@
 #include <winsock2.h>
 #include <windows.h>
 #include <stdbool.h>
+#include "client.h"
 
 enum server_errors
 {
@@ -12,20 +13,25 @@ enum server_errors
     SERVER_RUNTIME_ERROR
 };
 
-struct tcp_server
+struct server
 {
-    bool init_done;
-    bool stop_signal;
-    WSADATA wsa_data;
-    SOCKET server_socket;
-    SOCKET client_socket;
-    struct sockaddr_in server_address;
-    struct sockaddr_in client_address;
+    bool init;
+    bool stop;
+    SOCKET socket;
+    struct sockaddr_in address;
     pthread_t thread;
+    fd_set fd;
+    WSADATA wsa;
 };
 
-extern enum server_errors server_init(struct tcp_server *tcp_server_data, const int port);
-extern enum server_errors server_run(struct tcp_server *tcp_server_data);
-extern enum server_errors server_stop(struct tcp_server *tcp_server_data);
+struct tcp_server
+{
+    struct server server;
+    struct client *clients;
+};
+
+extern enum server_errors server_init(struct tcp_server *tcp, const int port);
+extern enum server_errors server_run(struct tcp_server *tcp);
+extern enum server_errors server_stop(struct tcp_server *tcp);
 
 #endif

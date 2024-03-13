@@ -1,5 +1,5 @@
 #ifndef CLIENT_H
-#define CLIENT_h
+#define CLIENT_H
 
 enum client_errors
 {
@@ -8,6 +8,15 @@ enum client_errors
     CLIENT_SEND_ERROR
 };
 
-void *handle_client(void *arg);
+struct client
+{
+    bool init;
+    bool stop;
+    SOCKET socket;
+    struct sockaddr_in address;
+    pthread_t thread;
+};
+
+void *client_thread(void *arg);
 
 #endif
