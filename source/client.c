@@ -15,6 +15,7 @@ enum request_types
 };
 
 static void *client_thread(void *arg);
+static void client_clear(struct client *client_data);
 
 void client_init(struct client *client_data)
 {
@@ -66,10 +67,21 @@ void client_stop(struct client *client_data)
     int join_status = pthread_join(client_data->thread, NULL);
     if (join_status != 0)
     {
-        fprintf(stderr, "Socket : %d Error stopping the client thread.\n");
+        fprintf(stderr, "Socket : %d Error stopping the client thread.\n", client_data->socket);
         client_data->error = CLIENT_RUNTIME_ERROR;
     }
 
+    closesocket(client_data->socket);
+    FD_ZERO(&client_data->fd);
+    free(client_data->request);
+    free(client_data->response);
+    client_data->init = false;
+}
+
+void client_clear(struct client *client_data)
+{
+    client_data->error = CLIENT_NO_ERROR;
+    client_data->stop = true;
     closesocket(client_data->socket);
     FD_ZERO(&client_data->fd);
     free(client_data->request);
@@ -107,7 +119,7 @@ void *client_thread(void *arg)
         if (bytes_received == 0)
         {
             fprintf(stderr, "Socket : %d Client is disconnected.\n", client_data->socket);
-            client_data->error = CLIENT_NO_ERROR;
+            client_data->error = CLIENT_DISCONNECTED;
             break;
         }
 
@@ -125,6 +137,11 @@ void *client_thread(void *arg)
         }
 
         printf("Socket : %d Message sent : %s\n", client_data->socket, client_data->response);
+    }
+
+    if (client_data->error != CLIENT_NO_ERROR)
+    {
+        client_clear(client_data);
     }
 
     printf("Socket : %d Client thread is closed.\n", client_data->socket);

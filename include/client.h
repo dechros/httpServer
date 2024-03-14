@@ -5,7 +5,8 @@ enum client_errors
 {
     CLIENT_NO_ERROR,
     CLIENT_INIT_ERROR,
-    CLIENT_RUNTIME_ERROR
+    CLIENT_RUNTIME_ERROR,
+    CLIENT_DISCONNECTED
 };
 
 struct client
