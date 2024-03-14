@@ -15,6 +15,7 @@ struct client
     SOCKET socket;
     struct sockaddr_in address;
     pthread_t thread;
+    fd_set fd;
 };
 
 void *client_thread(void *arg);

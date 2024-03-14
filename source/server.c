@@ -104,8 +104,7 @@ void *server_thread(void *arg)
 
     while (tcp->server.stop == false)
     {
-        struct timeval timeout;
-        timeout.tv_sec = 0;
+        struct timeval timeout = {0};
         timeout.tv_usec = 1000;
         fd_set temp_fd = tcp->server.fd;
 

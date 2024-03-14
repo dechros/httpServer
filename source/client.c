@@ -26,6 +26,24 @@ void *client_thread(void *arg)
 
     while (client_data->stop == false)
     {
+        FD_ZERO(&client_data->fd);
+        FD_SET(client_data->socket, &client_data->fd);
+        struct timeval timeout = {0};
+        timeout.tv_usec = 1000;
+        fd_set temp_fd = client_data->fd;
+
+        int socket_count = select(0, &temp_fd, NULL, NULL, &timeout);
+        if (socket_count == SOCKET_ERROR)
+        {
+            fprintf(stderr, "Select error. Socket : %d\n", client_data->socket);
+            error = CLIENT_RECEIVE_ERROR;
+            break;
+        }
+        if (socket_count == 0)
+        {
+            continue;
+        }
+
         int bytes_received = recv(client_data->socket, request, BUFFER_SIZE - 1, 0);
         if (bytes_received == SOCKET_ERROR)
         {
@@ -45,7 +63,7 @@ void *client_thread(void *arg)
 
         strcpy(response, request);
         int send_status = send(client_data->socket, response, strlen(response), 0);
-        if (send_status == 0)
+        if (send_status == SOCKET_ERROR)
         {
             fprintf(stderr, "Message send error. Socket : %d\n", client_data->socket);
             error = CLIENT_SEND_ERROR;
