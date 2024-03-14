@@ -18,33 +18,20 @@
 #define VER "0.1"
 #define PORT 8888
 
-static struct tcp_server server1 = {0};
-static struct tcp_server server2 = {0};
+static struct tcp_data tcp = {0};
 
 int main(void)
 {
     printf("Welcome to the HTTP server Version : %s \nPress ESC to exit from the application.\n", VER);
 
-    server_init(&server1, PORT);
-    if (server1.server.error != SERVER_NO_ERROR)
+    server_init(&tcp, PORT);
+    if (tcp.server.error != SERVER_NO_ERROR)
     {
         return EXIT_FAILURE;
     }
 
-    server_run(&server1);
-    if (server1.server.error != SERVER_NO_ERROR)
-    {
-        return EXIT_FAILURE;
-    }
-
-    server_init(&server2, 3152);
-    if (server2.server.error != SERVER_NO_ERROR)
-    {
-        return EXIT_FAILURE;
-    }
-
-    server_run(&server2);
-    if (server2.server.error != SERVER_NO_ERROR)
+    server_run(&tcp);
+    if (tcp.server.error != SERVER_NO_ERROR)
     {
         return EXIT_FAILURE;
     }
@@ -59,14 +46,8 @@ int main(void)
         Sleep(1);
     }
 
-    server_stop(&server1);
-    if (server1.server.error != SERVER_NO_ERROR)
-    {
-        return EXIT_FAILURE;
-    }
-
-    server_stop(&server2);
-    if (server2.server.error != SERVER_NO_ERROR)
+    server_stop(&tcp);
+    if (tcp.server.error != SERVER_NO_ERROR)
     {
         return EXIT_FAILURE;
     }

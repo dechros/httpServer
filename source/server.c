@@ -5,11 +5,10 @@
 #include "server.h"
 #include "client.h"
 
-#define MAX_CLIENT 2
-
 static void *server_thread(void *arg);
+static void server_clear(struct tcp_data *tcp);
 
-void server_init(struct tcp_server *tcp, const int port)
+void server_init(struct tcp_data *tcp, const int port)
 {
     tcp->server.address.sin_family = AF_INET;         /* IPV4 */
     tcp->server.address.sin_addr.s_addr = INADDR_ANY; /* Listen on every interface */
@@ -51,22 +50,15 @@ void server_init(struct tcp_server *tcp, const int port)
         return;
     }
 
-    tcp->clients = calloc(MAX_CLIENT, sizeof(struct client));
-    if (tcp->clients == NULL)
-    {
-        fprintf(stderr, "Port : %d Failed to init clients memory. %d\n", port);
-        tcp->server.error = SERVER_INIT_ERROR;
-        return;
-    }
-
     FD_ZERO(&tcp->server.fd);
     FD_SET(tcp->server.socket, &tcp->server.fd);
     tcp->server.timeout.tv_usec = 1000;
     tcp->server.init = true;
     tcp->server.stop = false;
+    tcp->server.error = SERVER_NO_ERROR;
 }
 
-void server_run(struct tcp_server *tcp)
+void server_run(struct tcp_data *tcp)
 {
     const int port = ntohs(tcp->server.address.sin_port);
 
@@ -86,7 +78,7 @@ void server_run(struct tcp_server *tcp)
     }
 }
 
-void server_stop(struct tcp_server *tcp)
+void server_stop(struct tcp_data *tcp)
 {
     tcp->server.stop = true;
     int join_status = pthread_join(tcp->server.thread, NULL);
@@ -96,16 +88,20 @@ void server_stop(struct tcp_server *tcp)
         tcp->server.error = SERVER_RUNTIME_ERROR;
     }
 
+    server_clear(tcp);
+}
+
+void server_clear(struct tcp_data *tcp)
+{
     closesocket(tcp->server.socket);
     FD_ZERO(&tcp->server.fd);
     WSACleanup();
-    free(tcp->clients);
     tcp->server.init = false;
 }
 
 void *server_thread(void *arg)
 {
-    struct tcp_server *tcp = (struct tcp_server *)arg;
+    struct tcp_data *tcp = (struct tcp_data *)arg;
     const int port = ntohs(tcp->server.address.sin_port);
     printf("Port : %d TCP server started listening.\n", port);
 
@@ -125,7 +121,7 @@ void *server_thread(void *arg)
             continue;
         }
 
-        struct client *new_client = NULL;
+        struct client_data *new_client = NULL;
         for (size_t i = 0; i < MAX_CLIENT; i++)
         {
             if (tcp->clients[i].init == false)
@@ -164,6 +160,7 @@ void *server_thread(void *arg)
         }
     }
 
+    server_clear(tcp);
     printf("Port : %d TCP server thread is stopped.\n", port);
     pthread_exit(NULL);
 }
