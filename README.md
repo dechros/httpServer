@@ -12,4 +12,4 @@ This project is an HTTP server developed for Windows operating systems and built
 
 ## Coding Guideline
 
-- Only one `return` keyword can be present in a function.
+- TODO

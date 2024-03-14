@@ -25,27 +25,26 @@ int main(void)
 {
     printf("Welcome to the HTTP server Version : %s \nPress ESC to exit from the application.\n", VER);
 
-    enum server_errors error;
-    error = server_init(&server1, PORT);
-    if (error != SERVER_NO_ERROR)
+    server_init(&server1, PORT);
+    if (server1.server.error != SERVER_NO_ERROR)
     {
         return EXIT_FAILURE;
     }
 
-    error = server_init(&server2, 3152);
-    if (error != SERVER_NO_ERROR)
+    server_run(&server1);
+    if (server1.server.error != SERVER_NO_ERROR)
     {
         return EXIT_FAILURE;
     }
 
-    error = server_run(&server1);
-    if (error != SERVER_NO_ERROR)
+    server_init(&server2, 3152);
+    if (server2.server.error != SERVER_NO_ERROR)
     {
         return EXIT_FAILURE;
     }
 
-    error = server_run(&server2);
-    if (error != SERVER_NO_ERROR)
+    server_run(&server2);
+    if (server2.server.error != SERVER_NO_ERROR)
     {
         return EXIT_FAILURE;
     }
@@ -60,8 +59,17 @@ int main(void)
         Sleep(1);
     }
 
-    error = server_stop(&server1);
-    error = server_stop(&server2);
+    server_stop(&server1);
+    if (server1.server.error != SERVER_NO_ERROR)
+    {
+        return EXIT_FAILURE;
+    }
+
+    server_stop(&server2);
+    if (server2.server.error != SERVER_NO_ERROR)
+    {
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }

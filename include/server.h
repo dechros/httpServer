@@ -22,6 +22,8 @@ struct server
     pthread_t thread;
     fd_set fd;
     WSADATA wsa;
+    struct timeval timeout;
+    enum server_errors error;
 };
 
 struct tcp_server
@@ -30,8 +32,8 @@ struct tcp_server
     struct client *clients;
 };
 
-extern enum server_errors server_init(struct tcp_server *tcp, const int port);
-extern enum server_errors server_run(struct tcp_server *tcp);
-extern enum server_errors server_stop(struct tcp_server *tcp);
+extern void server_init(struct tcp_server *tcp, const int port);
+extern void server_run(struct tcp_server *tcp);
+extern void server_stop(struct tcp_server *tcp);
 
 #endif
