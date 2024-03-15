@@ -32,7 +32,7 @@ void handle_http_protocol(const char *request_string, char *response_String, con
     snprintf(response_String, buffer_size, "HTTP/1.1 200 OK\r\nContent-Length: %lu\r\nContent-Type: text/plain\r\n\r\n%s", strlen(hello_res), hello_res);
 }
 
-static struct request_data detect_request_type(const char *request_string)
+struct request_data detect_request_type(const char *request_string)
 {
     struct request_data request_list[] = {
         {.type = REQUEST_OTHER, .string = "OTHER"},

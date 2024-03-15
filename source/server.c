@@ -91,7 +91,7 @@ void server_stop(struct tcp_data *tcp)
     server_clear(tcp);
 }
 
-static void server_clear(struct tcp_data *tcp)
+void server_clear(struct tcp_data *tcp)
 {
     closesocket(tcp->server.socket);
     FD_ZERO(&tcp->server.fd);
@@ -99,7 +99,7 @@ static void server_clear(struct tcp_data *tcp)
     tcp->server.init = false;
 }
 
-static void *server_thread(void *arg)
+void *server_thread(void *arg)
 {
     struct tcp_data *tcp = (struct tcp_data *)arg;
     const int port = ntohs(tcp->server.address.sin_port);
