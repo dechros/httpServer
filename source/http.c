@@ -23,19 +23,19 @@ struct request_data
 
 static struct request_data detect_request_type(const char *request_string);
 
-void handle_http_protocol(const char *request_string, char *response_string, const int buffer_size)
+void handle_http_protocol(const char *request, char *response, const int buffer_size)
 {
-    struct request_data request = detect_request_type(request_string);
-    printf("Request Type : %s\n", request.string);
+    struct request_data request_type = detect_request_type(request);
+    printf("Request Type : %s\n", request_type.string);
 
     const char *hello_res = "Hello, World!\r\n";
-    switch (request.type)
+    switch (request_type.type)
     {
     case REQUEST_GET:
     case REQUEST_POST:
     case REQUEST_PUT:
     case REQUEST_DELETE:
-        snprintf(response_string, buffer_size, "HTTP/1.1 200 OK\r\nContent-Length: %lu\r\nContent-Type: text/plain\r\n\r\n%s", strlen(hello_res), hello_res);
+        snprintf(response, buffer_size, "HTTP/1.1 200 OK\r\nContent-Length: %lu\r\nContent-Type: text/plain\r\n\r\n%s", strlen(hello_res), hello_res);
         break;
 
     case REQUEST_OTHER:
@@ -43,7 +43,7 @@ void handle_http_protocol(const char *request_string, char *response_string, con
     case REQUEST_HEAD:
     case REQUEST_OPTIONS:
     case REQUEST_TRACE:
-        snprintf(response_string, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
+        snprintf(response, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
         break;
 
     default:
@@ -53,7 +53,7 @@ void handle_http_protocol(const char *request_string, char *response_string, con
 
 struct request_data detect_request_type(const char *request_string)
 {
-    struct request_data request_list[] = {
+    struct request_data request_type_list[] = {
         {.type = REQUEST_OTHER, .string = "OTHER"},
         {.type = REQUEST_GET, .string = "GET"},
         {.type = REQUEST_POST, .string = "POST"},
@@ -65,22 +65,19 @@ struct request_data detect_request_type(const char *request_string)
         {.type = REQUEST_TRACE, .string = "TRACE"},
     };
 
-    struct request_data request = request_list[0];
-    size_t request_size = strlen(request_string);
-    size_t request_list_size = sizeof(request_list) / sizeof(struct request_data);
+    struct request_data request_type = request_type_list[0];
 
-    for (size_t i = 0; i < request_list_size; i++)
+    for (size_t i = 0; i < sizeof(request_type_list) / sizeof(struct request_data); i++)
     {
-        size_t request_data_str_size = strlen(request_list[i].string);
-        for (size_t j = 0; j < request_size; j++)
+        for (size_t j = 0; j < strlen(request_string); j++)
         {
-            if (strncmp(request_list[i].string, request_string + j, request_data_str_size) == 0)
+            if (strncmp(request_type_list[i].string, request_string + j, strlen(request_type_list[i].string)) == 0)
             {
-                request = request_list[i];
+                request_type = request_type_list[i];
                 break;
             }
         }
     }
 
-    return request;
+    return request_type;
 }

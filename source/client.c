@@ -155,14 +155,12 @@ struct protocol_data detect_protocol_type(const char *request)
     };
 
     struct protocol_data protocol = protocol_list[0];
-    size_t request_size = strlen(request);
-    size_t protocol_list_size = sizeof(protocol_list) / sizeof(struct protocol_data);
-    for (size_t i = 0; i < protocol_list_size; i++)
+
+    for (size_t i = 0; i < sizeof(protocol_list) / sizeof(struct protocol_data); i++)
     {
-        size_t protocol_data_str_size = strlen(protocol_list[i].string);
-        for (size_t j = 0; j < request_size; j++)
+        for (size_t j = 0; j < strlen(request); j++)
         {
-            if (strncmp(protocol_list[i].string, request + j, protocol_data_str_size) == 0)
+            if (strncmp(protocol_list[i].string, request + j, strlen(protocol_list[i].string)) == 0)
             {
                 protocol = protocol_list[i];
                 break;
