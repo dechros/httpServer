@@ -14,8 +14,9 @@ enum request_types
 
 static void *client_thread(void *arg);
 static void client_clear(struct client_data *client);
+static enum request_types detect_request_type();
 
-void client_init(struct client_data *client)
+extern void client_init(struct client_data *client)
 {
     FD_ZERO(&client->fd);
     FD_SET(client->socket, &client->fd);
@@ -25,7 +26,7 @@ void client_init(struct client_data *client)
     client->error = CLIENT_NO_ERROR;
 }
 
-void client_run(struct client_data *client)
+extern void client_run(struct client_data *client)
 {
     if (client->init == false)
     {
@@ -43,7 +44,7 @@ void client_run(struct client_data *client)
     }
 }
 
-void client_stop(struct client_data *client)
+extern void client_stop(struct client_data *client)
 {
     client->stop = true;
     int join_status = pthread_join(client->thread, NULL);
@@ -56,14 +57,14 @@ void client_stop(struct client_data *client)
     client_clear(client);
 }
 
-void client_clear(struct client_data *client)
+extern void client_clear(struct client_data *client)
 {
     closesocket(client->socket);
     FD_ZERO(&client->fd);
     client->init = false;
 }
 
-void *client_thread(void *arg)
+extern void *client_thread(void *arg)
 {
     struct client_data *client = (struct client_data *)arg;
     printf("Socket : %d Client thread is created.\n", client->socket);
@@ -118,6 +119,6 @@ void *client_thread(void *arg)
     pthread_exit(NULL);
 }
 
-enum request_types detect_request_type()
+static enum request_types detect_request_type()
 {
 }
