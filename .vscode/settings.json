@@ -66,6 +66,7 @@
         "server.h": "c",
         "string.h": "c",
         "windows.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "http.h": "c"
     },
 }

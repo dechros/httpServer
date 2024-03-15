@@ -8,7 +8,7 @@
 static void *server_thread(void *arg);
 static void server_clear(struct tcp_data *tcp);
 
-extern void server_init(struct tcp_data *tcp, const int port)
+void server_init(struct tcp_data *tcp, const int port)
 {
     tcp->server.address.sin_family = AF_INET;         /* IPV4 */
     tcp->server.address.sin_addr.s_addr = INADDR_ANY; /* Listen on every interface */
@@ -58,7 +58,7 @@ extern void server_init(struct tcp_data *tcp, const int port)
     tcp->server.error = SERVER_NO_ERROR;
 }
 
-extern void server_run(struct tcp_data *tcp)
+void server_run(struct tcp_data *tcp)
 {
     const int port = ntohs(tcp->server.address.sin_port);
 
@@ -78,7 +78,7 @@ extern void server_run(struct tcp_data *tcp)
     }
 }
 
-extern void server_stop(struct tcp_data *tcp)
+void server_stop(struct tcp_data *tcp)
 {
     tcp->server.stop = true;
     int join_status = pthread_join(tcp->server.thread, NULL);

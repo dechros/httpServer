@@ -3,20 +3,27 @@
 #include <winsock2.h>
 #include <pthread.h>
 #include "client.h"
+#include "http.h"
 
-enum request_types
+enum protocol_types
 {
-    HTTP,
-    FTP,
-    SMTP,
-    OTHER
+    PROTOCOL_OTHER,
+    PROTOCOL_HTTP,
+    PROTOCOL_FTP,
+    PROTOCOL_SMTP
+};
+
+struct protocol_data
+{
+    enum protocol_types type;
+    const char *string;
 };
 
 static void *client_thread(void *arg);
 static void client_clear(struct client_data *client);
-static enum request_types detect_request_type();
+static struct protocol_data detect_protocol_type(const char *request);
 
-extern void client_init(struct client_data *client)
+void client_init(struct client_data *client)
 {
     FD_ZERO(&client->fd);
     FD_SET(client->socket, &client->fd);
@@ -26,7 +33,7 @@ extern void client_init(struct client_data *client)
     client->error = CLIENT_NO_ERROR;
 }
 
-extern void client_run(struct client_data *client)
+void client_run(struct client_data *client)
 {
     if (client->init == false)
     {
@@ -44,7 +51,7 @@ extern void client_run(struct client_data *client)
     }
 }
 
-extern void client_stop(struct client_data *client)
+void client_stop(struct client_data *client)
 {
     client->stop = true;
     int join_status = pthread_join(client->thread, NULL);
@@ -57,14 +64,14 @@ extern void client_stop(struct client_data *client)
     client_clear(client);
 }
 
-extern void client_clear(struct client_data *client)
+void client_clear(struct client_data *client)
 {
     closesocket(client->socket);
     FD_ZERO(&client->fd);
     client->init = false;
 }
 
-extern void *client_thread(void *arg)
+void *client_thread(void *arg)
 {
     struct client_data *client = (struct client_data *)arg;
     printf("Socket : %d Client thread is created.\n", client->socket);
@@ -100,9 +107,27 @@ extern void *client_thread(void *arg)
 
         client->request[bytes_received] = '\0';
         printf("Socket : %d Bytes received : %d\n", client->socket, bytes_received);
-        printf("Socket : %d Message received : %s\n", client->socket, client->request);
 
-        strcpy(client->response, client->request);
+        struct protocol_data protocol = detect_protocol_type((const char *)client->request);
+        printf("Socket : %d Protocol Type : %s\n", client->socket, protocol.string);
+
+        switch (protocol.type)
+        {
+        case PROTOCOL_HTTP:
+            handle_http_protocol((const char *)client->request, client->response, BUFFER_SIZE);
+            break;
+
+        case PROTOCOL_FTP:
+        case PROTOCOL_SMTP:
+        case PROTOCOL_OTHER:
+            snprintf(client->response, BUFFER_SIZE, "501 Not Implemented\r\n");
+            break;
+
+        default:
+            snprintf(client->response, BUFFER_SIZE, "400 Bad Request\r\n");
+            break;
+        }
+
         int send_status = send(client->socket, client->response, strlen(client->response), 0);
         if (send_status == SOCKET_ERROR)
         {
@@ -112,6 +137,7 @@ extern void *client_thread(void *arg)
         }
 
         printf("Socket : %d Message sent : %s\n", client->socket, client->response);
+        break;
     }
 
     client_clear(client);
@@ -119,6 +145,30 @@ extern void *client_thread(void *arg)
     pthread_exit(NULL);
 }
 
-static enum request_types detect_request_type()
+static struct protocol_data detect_protocol_type(const char *request)
 {
+    struct protocol_data protocol_list[] = {
+        {.type = PROTOCOL_OTHER, .string = "OTHER"},
+        {.type = PROTOCOL_HTTP, .string = "HTTP"},
+        {.type = PROTOCOL_FTP, .string = "FTP"},
+        {.type = PROTOCOL_SMTP, .string = "SMTP"},
+    };
+
+    struct protocol_data protocol = protocol_list[0];
+    size_t request_size = strlen(request);
+    size_t protocol_list_size = sizeof(protocol_list) / sizeof(struct protocol_data);
+    for (size_t i = 0; i < protocol_list_size; i++)
+    {
+        size_t protocol_data_str_size = strlen(protocol_list[i].string);
+        for (size_t j = 0; j < request_size; j++)
+        {
+            if (strncmp(protocol_list[i].string, request + j, protocol_data_str_size) == 0)
+            {
+                protocol = protocol_list[i];
+                break;
+            }
+        }
+    }
+
+    return protocol;
 }
