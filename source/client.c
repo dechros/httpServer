@@ -145,7 +145,7 @@ void *client_thread(void *arg)
     pthread_exit(NULL);
 }
 
-static struct protocol_data detect_protocol_type(const char *request)
+struct protocol_data detect_protocol_type(const char *request)
 {
     struct protocol_data protocol_list[] = {
         {.type = PROTOCOL_OTHER, .string = "OTHER"},

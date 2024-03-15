@@ -23,13 +23,32 @@ struct request_data
 
 static struct request_data detect_request_type(const char *request_string);
 
-void handle_http_protocol(const char *request_string, char *response_String, const int buffer_size)
+void handle_http_protocol(const char *request_string, char *response_string, const int buffer_size)
 {
-    // printf("%s", request_string);
     struct request_data request = detect_request_type(request_string);
     printf("Request Type : %s\n", request.string);
+
     const char *hello_res = "Hello, World!\r\n";
-    snprintf(response_String, buffer_size, "HTTP/1.1 200 OK\r\nContent-Length: %lu\r\nContent-Type: text/plain\r\n\r\n%s", strlen(hello_res), hello_res);
+    switch (request.type)
+    {
+    case REQUEST_GET:
+    case REQUEST_POST:
+    case REQUEST_PUT:
+    case REQUEST_DELETE:
+        snprintf(response_string, buffer_size, "HTTP/1.1 200 OK\r\nContent-Length: %lu\r\nContent-Type: text/plain\r\n\r\n%s", strlen(hello_res), hello_res);
+        break;
+
+    case REQUEST_OTHER:
+    case REQUEST_PATCH:
+    case REQUEST_HEAD:
+    case REQUEST_OPTIONS:
+    case REQUEST_TRACE:
+        snprintf(response_string, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
+        break;
+
+    default:
+        break;
+    }
 }
 
 struct request_data detect_request_type(const char *request_string)
