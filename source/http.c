@@ -1,6 +1,8 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "http.h"
+#include "file.h"
 
 enum request_types
 {
@@ -28,26 +30,48 @@ void handle_http_protocol(const char *request, char *response, const int buffer_
     struct request_data request_type = detect_request_type(request);
     printf("Request Type : %s\n", request_type.string);
 
-    const char *hello_res = "Hello, World!\r\n";
-    switch (request_type.type)
+    if (request_type.type == REQUEST_GET)
     {
-    case REQUEST_GET:
-    case REQUEST_POST:
-    case REQUEST_PUT:
-    case REQUEST_DELETE:
-        snprintf(response, buffer_size, "HTTP/1.1 200 OK\r\nContent-Length: %lu\r\nContent-Type: text/plain\r\n\r\n%s", strlen(hello_res), hello_res);
-        break;
-
-    case REQUEST_OTHER:
-    case REQUEST_PATCH:
-    case REQUEST_HEAD:
-    case REQUEST_OPTIONS:
-    case REQUEST_TRACE:
+        char *file = file_read(".\\www\\index.html");
+        snprintf(response, buffer_size, "HTTP/1.1 200 OK\r\nContent-Length: %lu\r\nContent-Type: text/html\r\n\r\n%s", strlen(file), file);
+        free(file);
+    }
+    else if (request_type.type == REQUEST_POST)
+    {
         snprintf(response, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
-        break;
-
-    default:
-        break;
+    }
+    else if (request_type.type == REQUEST_PUT)
+    {
+        snprintf(response, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
+    }
+    else if (request_type.type == REQUEST_DELETE)
+    {
+        snprintf(response, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
+    }
+    else if (request_type.type == REQUEST_PATCH)
+    {
+        snprintf(response, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
+    }
+    else if (request_type.type == REQUEST_HEAD)
+    {
+        snprintf(response, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
+    }
+    else if (request_type.type == REQUEST_OPTIONS)
+    {
+        snprintf(response, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
+    }
+    else if (request_type.type == REQUEST_TRACE)
+    {
+        snprintf(response, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
+    }
+    else if (request_type.type == REQUEST_OTHER)
+    {
+        snprintf(response, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
+    }
+    else
+    {
+        snprintf(response, buffer_size, "HTTP/1.1 501 Not Implemented\r\nContent-Length: 0\r\n\r\n");
+        fprintf(stderr, "Unexpected request type : %s", request_type.type);
     }
 }
 

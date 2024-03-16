@@ -111,21 +111,26 @@ void *client_thread(void *arg)
         struct protocol_data protocol = detect_protocol_type((const char *)client->request);
         printf("Socket : %d Protocol Type : %s\n", client->socket, protocol.string);
 
-        switch (protocol.type)
+        if (protocol.type == PROTOCOL_HTTP)
         {
-        case PROTOCOL_HTTP:
             handle_http_protocol((const char *)client->request, client->response, BUFFER_SIZE);
-            break;
-
-        case PROTOCOL_FTP:
-        case PROTOCOL_SMTP:
-        case PROTOCOL_OTHER:
+        }
+        else if (protocol.type == PROTOCOL_FTP)
+        {
             snprintf(client->response, BUFFER_SIZE, "501 Not Implemented\r\n");
-            break;
-
-        default:
+        }
+        else if (protocol.type == PROTOCOL_SMTP)
+        {
+            snprintf(client->response, BUFFER_SIZE, "501 Not Implemented\r\n");
+        }
+        else if (protocol.type == PROTOCOL_OTHER)
+        {
+            snprintf(client->response, BUFFER_SIZE, "501 Not Implemented\r\n");
+        }
+        else
+        {
             snprintf(client->response, BUFFER_SIZE, "400 Bad Request\r\n");
-            break;
+            fprintf(stderr, "Socket : %d Unexpected protocol.", client->socket);
         }
 
         int send_status = send(client->socket, client->response, strlen(client->response), 0);

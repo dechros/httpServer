@@ -12,6 +12,7 @@
                 "${workspaceFolder}\\source\\server.c",
                 "${workspaceFolder}\\source\\client.c",
                 "${workspaceFolder}\\source\\http.c",
+                "${workspaceFolder}\\source\\file.c",
                 "-o",
                 "${workspaceFolder}\\bin\\main.exe",
                 "-lws2_32",

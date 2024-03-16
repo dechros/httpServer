@@ -1,0 +1,24 @@
+<html>
+
+<body>
+    <button id="button">Button</button>
+    <h3 id="text">Hello World Seda 52!</h3>
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const button = document.getElementById("button");
+        const text = document.getElementById("text");
+
+        button.addEventListener('click', function () {
+            if (text.innerHTML.includes("31")) {
+                text.innerHTML = "Hello World Seda 52!"
+            }
+            else {
+                text.innerHTML = "Hello World Seda 31!";
+            }
+        })
+    });
+</script>
+
+</html>
