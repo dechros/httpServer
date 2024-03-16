@@ -32,6 +32,7 @@ void handle_http_protocol(const char *request, char *response, const int buffer_
 
     if (request_type.type == REQUEST_GET)
     {
+        snprintf(response, buffer_size, "HTTP/1.1 302 Found\r\nLocation: http://localhost:8888/index.html\r\n\r\n");
         char *file = file_read(".\\www\\index.html");
         snprintf(response, buffer_size, "HTTP/1.1 200 OK\r\nContent-Length: %lu\r\nContent-Type: text/html\r\n\r\n%s", strlen(file), file);
         free(file);
